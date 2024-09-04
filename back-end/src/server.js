@@ -9,6 +9,9 @@ import conn from "./config/dbconfig.js"
 // Initializing models:
 import Postagem from "./model/postagemModel.js";
 
+// Importing routers:
+import postagemRouter from "./routes/postagemRoutes.js"
+
 // Initializing Express:
 const app = express();
 
@@ -29,6 +32,9 @@ conn.sync().then(() => {
     console.log(`| Banco de dados conectado.  |\n`)
   })
 }).catch((error) => console.error(error))
+
+// Using routes:
+app.use("/postagens", postagemRouter)
 
 // Default unknown route:
 app.use("/", (req, res) => {
