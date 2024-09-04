@@ -6,6 +6,9 @@ import cors from "cors";
 // Database connection:
 import conn from "./config/dbconfig.js"
 
+// Initializing models:
+import Postagem from "./model/postagemModel.js";
+
 // Initializing Express:
 const app = express();
 
@@ -28,7 +31,7 @@ conn.sync().then(() => {
 }).catch((error) => console.error(error))
 
 // Default unknown route:
-app.use("/", (res) => {
+app.use("/", (req, res) => {
   res.status(404).json({
     message: "Rota não encontrada.",
     tip: "Verifique se você digitou o URL corretamente."
