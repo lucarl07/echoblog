@@ -1,10 +1,10 @@
 import { Router } from "express";
 
-import {} from "../controller/postagemController.js"
+import { createPost } from "../controller/postagemController.js"
 
 const router = Router();
 
-router.post("/")
+router.post("/", createPost)
 router.get("/")
 router.get("/:id")
 router.put("/:id")
