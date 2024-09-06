@@ -63,6 +63,7 @@ export const showPostsByPage = async (req, res) => {
       postagens: postagens.rows
     });
   } catch (error) {
+    console.log(error)
     res.status(500).json({
       err: "Erro interno ao buscar postagens.",
     });
