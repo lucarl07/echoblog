@@ -1,11 +1,11 @@
 import { Router } from "express";
 
-import { createPost } from "../controller/postagemController.js"
+import { createPost, showPostsByPage } from "../controller/postagemController.js"
 
 const router = Router();
 
 router.post("/", createPost)
-router.get("/")
+router.get("/", showPostsByPage)
 router.get("/:id")
 router.put("/:id")
 router.delete("/:id")
