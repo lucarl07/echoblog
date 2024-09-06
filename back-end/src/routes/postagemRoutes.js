@@ -7,7 +7,8 @@ import {
   deletePost, 
   getPostByID, 
   showPostsByPage, 
-  updatePost
+  updatePost,
+  uploadImageToPost
 } from "../controller/postagemController.js"
 
 const router = Router();
@@ -17,6 +18,6 @@ router.get("/", showPostsByPage)
 router.get("/:id", getPostByID)
 router.put("/:id", updatePost)
 router.delete("/:id", deletePost)
-router.post("/:id/imagem", uploader.single("imagem"))
+router.post("/:id/imagem", uploader.single("imagem"), uploadImageToPost)
 
 export default router;

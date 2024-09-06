@@ -184,3 +184,25 @@ export const deletePost = async (req, res) => {
     });
   }
 }
+
+export const uploadImageToPost = async (req, res) => {
+  const paramsVal = postIdSchema.safeParse(req.params);
+
+  if (!paramsVal.success) {
+    return res.status(400).json({
+      message: "Os dados recebidos da URL da requisição são inválidos.",
+      details: formatZodError(paramsVal.error),
+    });
+  }
+
+  try {
+    res.status(201).json({
+      message: "Imagem enviada com sucesso."
+    })
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({
+      message: "Erro ao enviar imagem."
+    })
+  }
+}
