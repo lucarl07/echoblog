@@ -31,12 +31,12 @@ export const createPost = async (req, res) => {
   try {
     await Postagem.create(newPost);
     res.status(201).json({
-      message: "Tarefa criada com sucesso!"
+      message: "Postagem publicada com sucesso!"
     })
   } catch (error) {
     console.log(error);
     res.status(500).json({
-      message: "Erro interno durante a criação da tarefa."
+      message: "Erro interno durante o envio da postagem."
     })
   }
 }
