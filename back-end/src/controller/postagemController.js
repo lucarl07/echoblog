@@ -131,7 +131,7 @@ export const updatePost = async (req, res) => {
     const postagem = await Postagem.findByPk(id)
     
     if (!postagem) {
-      res.status(404).json({
+      return res.status(404).json({
         message: "Postagem não encontrada."
       })
     }
