@@ -3,6 +3,7 @@ import Postagem from "../model/postagemModel.js";
 
 // Model Validations:
 import createPostSchema from "../validators/createPostSchema.js";
+import updatePostSchema from "../validators/updatePostSchema.js";
 import postIdSchema from "../validators/postIdSchema.js";
 
 // Helpers:
@@ -99,3 +100,52 @@ export const getPostByID = async (req, res) => {
     });
   }
 };
+
+export const updatePost = async (req, res) => {
+  const paramsVal = postIdSchema.safeParse(req.params);
+
+  if (!paramsVal.success) {
+    return res.status(400).json({
+      message: "Os dados recebidos da URL da requisição são inválidos.",
+      details: formatZodError(paramsVal.error),
+    });
+  }
+
+  const bodyVal = updatePostSchema.safeParse(req.body);
+  
+  if (!bodyVal.success) {
+    return res.status(400).json({
+      message: "Os dados recebidos do corpo da requisição são inválidos.",
+      details: formatZodError(bodyVal.error),
+    });
+  }
+
+  const { id } = req.params;
+  const { titulo, conteudo, imagem } = req.body
+
+  const postagemAtualizada = {
+    titulo, conteudo, imagem
+  }
+
+  try {
+    const postagem = await Postagem.findByPk(id)
+    
+    if (!postagem) {
+      res.status(404).json({
+        message: "Postagem não encontrada."
+      })
+    }
+
+    await Postagem.update(postagemAtualizada, { 
+      where: { postagem_id: id } 
+    })
+    res.status(200).json({
+      message: "Postagem atualizada com sucesso!"
+    })
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({
+      message: "Erro interno durante a atualização da postagem."
+    })
+  }
+}
