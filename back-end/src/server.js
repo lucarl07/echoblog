@@ -2,6 +2,8 @@
 import "dotenv/config"
 import express from "express"
 import cors from "cors";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 // Database connection:
 import conn from "./config/dbconfig.js"
@@ -14,6 +16,11 @@ import postagemRouter from "./routes/postagemRoutes.js"
 
 // Initializing Express:
 const app = express();
+
+// Path constraints + using "public" route
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+app.use("/public", express.static(path.join(__dirname, "public")));
 
 // Declaring the server port:
 const PORT = process.env.PORT
