@@ -3,6 +3,7 @@ import Postagem from "../model/postagemModel.js";
 
 // Model Validations:
 import createPostSchema from "../validators/createPostSchema.js";
+import postIdSchema from "../validators/postIdSchema.js";
 
 // Helpers:
 import formatZodError from "../helpers/formatZodError.js";
@@ -64,6 +65,36 @@ export const showPostsByPage = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       err: "Erro interno ao buscar postagens.",
+    });
+  }
+};
+
+export const getPostByID = async (req, res) => {
+  const paramsVal = postIdSchema.safeParse(req.params);
+
+  if (!paramsVal.success) {
+    return res.status(400).json({
+      message: "Os dados recebidos da URL da requisição são inválidos.",
+      details: formatZodError(paramsVal.error),
+    });
+  }
+
+  const postagemId = req.params.id;
+
+  try {
+    const postagem = await Postagem.findByPk(postagemId);
+
+    if (!postagem) {
+      return res.status(404).json({
+        message: "Postagem não encontrada.",
+      });
+    }
+
+    res.status(200).json(postagem);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      err: "Erro interno ao buscar a postagem.",
     });
   }
 };
