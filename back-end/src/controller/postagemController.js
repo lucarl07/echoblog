@@ -149,3 +149,38 @@ export const updatePost = async (req, res) => {
     })
   }
 }
+
+export const deletePost = async (req, res) => {
+  const paramsVal = postIdSchema.safeParse(req.params);
+
+  if (!paramsVal.success) {
+    return res.status(400).json({
+      message: "Os dados recebidos da URL da requisição são inválidos.",
+      details: formatZodError(paramsVal.error),
+    });
+  }
+
+  const postagem_id = req.params.id;
+
+  try {
+    const postagem = await Postagem.findByPk(postagem_id)
+    
+    if (!postagem) {
+      return res.status(404).json({
+        message: "Postagem não encontrada."
+      })
+    }
+
+    await Postagem.destroy({
+      where: { postagem_id }
+    })
+    res.status(200).json({
+      message: "Postagem removida com sucesso."
+    })
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      err: "Erro interno ao remover a postagem.",
+    });
+  }
+}
