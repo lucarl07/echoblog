@@ -1,5 +1,5 @@
 // Model Source:
-import Postagem from "../model/postagemModel.js";
+import Usuario from "../model/usuarioModel.js";
 
 // Model Validations:
 
