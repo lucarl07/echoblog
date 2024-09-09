@@ -1,17 +1,17 @@
 import { Router } from "express";
 
-import {} from "../controller/usuariosController.js"
+import { alterUserPermissions, getUserList, loginAsUser, registerUser, removeUserAccount, updateUser } from "../controller/usuariosController.js"
 
 const router = Router();
 
 // Public Routes:
-router.post("/registro")
-router.post("/login")
-router.put("/:id")
+router.post("/registro", registerUser)
+router.post("/login", loginAsUser)
+router.put("/:id", updateUser)
 
 // Limited Routes (Admin-only):
-router.get("/")
-router.delete("/:id")
-router.patch("/:id/papel")
+router.get("/", getUserList)
+router.delete("/:id", removeUserAccount)
+router.patch("/:id/papel", alterUserPermissions)
 
 export default router;
