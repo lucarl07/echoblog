@@ -1,9 +1,14 @@
+// Dependencies:
+import { Op } from "sequelize";
+
 // Model Source:
 import Usuario from "../model/usuarioModel.js";
 
 // Model Validations:
 import registerUserSchema from "../validators/registerUserSchema.js";
 import loginSchema from "../validators/loginSchema.js";
+import postIdSchema from "../validators/postIdSchema.js";
+import updateUserSchema from "../validators/updateUserSchema.js";
 
 // Helpers:
 import formatZodError from "../helpers/formatZodError.js";
@@ -85,7 +90,72 @@ export const loginAsUser = async (req, res) => {
   }
 }
 
-export const updateUser = async (req, res) => {}
+export const updateUser = async (req, res) => {
+  const paramsVal = postIdSchema.safeParse(req.params)
+
+  if (!paramsVal.success) {
+    return res.status(400).json({
+      message: "O parâmetro ID recebido é inválido.",
+      details: formatZodError(bodyVal.error),
+    });
+  }
+
+  const bodyVal = updateUserSchema.safeParse(req.body)
+
+  if (!bodyVal.success) {
+    return res.status(400).json({
+      message: "Os dados recebidos do corpo da requisição são inválidos.",
+      details: formatZodError(bodyVal.error),
+    });
+  }
+
+  const { id } = req.params
+  const { nome, email, senha, papel } = req.body
+  
+  try {
+    const user = await Usuario.findByPk(id)
+    
+    if (!user) {
+      return res.status(404).json({
+        message: "Usuário não encontrado."
+      })
+    }
+
+    const usedEmail = await Usuario.findAll({ 
+      where: {
+        email,
+        [Op.not]: { 
+          usuario_id: id 
+        }
+      },
+    })
+
+    if (usedEmail.length > 0) {
+      return res.status(409).json({
+        message: "O e-mail inserido já está em uso."
+      })
+    }
+
+    const updatedUser = { nome, email, papel }
+
+    if (senha) {
+      const hashedSenha = hashPassword(senha, 10)
+      updatedUser['senha'] = hashedSenha
+    }
+
+    await Usuario.update(updatedUser, {
+      where: { usuario_id: id }
+    })
+    res.status(200).json({
+      message: "Usuário atualizado com sucesso!"
+    })
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Erro interno durante a alteração do usuário."
+    })
+  }
+}
 
 export const getUserList = async (req, res) => {}
 
