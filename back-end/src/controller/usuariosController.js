@@ -65,13 +65,13 @@ export const loginAsUser = async (req, res) => {
     const user = await Usuario.findOne({ where: {email} })
 
     if (!user) {
-      return res.status(409).json({
-        message: "O e-mail não existe."
+      return res.status(404).json({
+        message: "Um usuário com esse e-mail não existe."
       })
     }
     if (!checkPassword(senha, user.senha)) {
-      return res.status(409).json({
-        message: "A senha está incorreta."
+      return res.status(401).json({
+        message: "A senha para este usuário está incorreta."
       })
     }
 
