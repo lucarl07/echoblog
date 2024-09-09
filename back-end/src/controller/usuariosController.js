@@ -6,6 +6,7 @@ import registerUserSchema from "../validators/registerUserSchema.js";
 
 // Helpers:
 import formatZodError from "../helpers/formatZodError.js";
+import hashPassword from "../helpers/hashPassword.js";
 
 export const registerUser = async (req, res) => {
   const bodyVal = registerUserSchema.safeParse(req.body)
@@ -19,9 +20,15 @@ export const registerUser = async (req, res) => {
 
   const { nome, email, senha, papel } = req.body
 
-  const newUser = { nome, email, senha, papel }
-
   try {
+    const hashedSenha = hashPassword(senha, 10)
+
+    const newUser = { 
+      nome, email, 
+      senha: hashedSenha, 
+      papel
+    }
+
     await Usuario.create(newUser)
     res.status(200).json({
       message: "Usuário cadastrado com sucesso!"
