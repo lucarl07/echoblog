@@ -8,6 +8,7 @@ import postIdSchema from "../validators/postIdSchema.js";
 
 // Helpers:
 import formatZodError from "../helpers/formatZodError.js";
+import { request } from "express";
 
 export const createPost = async (req, res) => {
   const bodyVal = createPostSchema.safeParse(req.body);
@@ -19,14 +20,16 @@ export const createPost = async (req, res) => {
     });
   }
   
-  const { titulo, conteudo, autor, imagem } = req.body;
+  const { titulo, conteudo, autor } = req.body;
+  let imagem = ""
 
-  const newPost = {
-    titulo,
-    conteudo,
-    autor,
-    imagem: imagem || ""
+  if (request.file) {
+    imagem = request.file.filename
+  } else {
+    imagem = ""
   }
+
+  const newPost = { titulo, conteudo, autor, imagem }
 
   try {
     await Postagem.create(newPost);
