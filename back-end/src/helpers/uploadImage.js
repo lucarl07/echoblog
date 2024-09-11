@@ -8,16 +8,19 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
+  destination: (req, file, cb) => {
     let folder = '';
 
     if (req.baseUrl.includes("postagens")) {
       folder = "postagens"
     }
+    if (req.baseUrl.includes("usuarios")) {
+      folder = "usuarios"
+    }
 
     cb(null, path.join(__dirname, `../../public/${folder}`))
   },
-  filename: function (req, file, cb) {
+  filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + String(Math.floor(Math.random() * 100000))
     cb(null, uniqueSuffix + path.extname(file.originalname))
   }
