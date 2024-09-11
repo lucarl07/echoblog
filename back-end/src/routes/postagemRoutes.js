@@ -13,7 +13,7 @@ import {
 
 const router = Router();
 
-router.post("/", createPost)
+router.post("/", uploader.single("imagem"), createPost)
 router.get("/", showPostsByPage)
 router.get("/:id", getPostByID)
 router.put("/:id", updatePost)
