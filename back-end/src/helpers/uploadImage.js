@@ -7,7 +7,7 @@ import { fileURLToPath } from "node:url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const storage = multer.diskStorage({
+const imgStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     let folder = '';
 
@@ -21,13 +21,13 @@ const storage = multer.diskStorage({
     cb(null, path.join(__dirname, `../../public/${folder}`))
   },
   filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + String(Math.floor(Math.random() * 100000))
-    cb(null, uniqueSuffix + path.extname(file.originalname))
+    const uniqueSuffix = String(Math.floor(Math.random() * 100000))
+    cb(null, Date.now() + uniqueSuffix + path.extname)
   }
 })
 
 const uploadImage = multer({
-  storage,
+  storage: imgStorage,
   fileFilter(req, file, cb) {
     const validTypes = /\.(png||jpg)$/
 
