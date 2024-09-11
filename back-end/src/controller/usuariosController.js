@@ -210,4 +210,41 @@ export const removeUserAccount = async (req, res) => {
   }
 }
 
-export const alterUserPermissions = async (req, res) => {}
+export const alterUserPermissions = async (req, res) => {
+  const paramsVal = postIdSchema.safeParse(req.params)
+
+  if (!paramsVal.success) {
+    return res.status(400).json({
+      message: "O parâmetro ID recebido é inválido.",
+      details: formatZodError(bodyVal.error),
+    });
+  }
+
+  const usuario_id = req.params.id
+
+  try { 
+    const usuario = await Usuario.findByPk(usuario_id, { raw: true })
+    let newRole = ""
+
+    if (usuario.papel == 'leitor') {
+      newRole = 'autor'
+    } else if (usuario.papel == 'autor') {
+      newRole = 'leitor'
+    }
+
+    await Usuario.update(
+      { papel: newRole }, 
+      { where: {usuario_id} }
+    );
+
+    res.status(200).json({
+      message: "Papel do usuário modificado com sucesso.",
+      newRole
+    })
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Erro interno durante a alteração de permissões."
+    })
+  }
+}
