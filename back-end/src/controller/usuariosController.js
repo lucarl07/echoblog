@@ -184,6 +184,30 @@ export const getUserList = async (req, res) => {
   }
 }
 
-export const removeUserAccount = async (req, res) => {}
+export const removeUserAccount = async (req, res) => {
+  const paramsVal = postIdSchema.safeParse(req.params)
+
+  if (!paramsVal.success) {
+    return res.status(400).json({
+      message: "O parâmetro ID recebido é inválido.",
+      details: formatZodError(bodyVal.error),
+    });
+  }
+
+  const usuario_id = req.params.id
+
+  try { 
+    await Usuario.destroy({ where: { usuario_id } })
+
+    res.status(200).json({
+      message: "Usuário removido com sucesso."
+    })
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Erro interno durante a busca por usuários."
+    })
+  }
+}
 
 export const alterUserPermissions = async (req, res) => {}
