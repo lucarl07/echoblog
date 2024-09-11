@@ -17,18 +17,18 @@ import postagemRouter from "./routes/postagemRoutes.js"
 // Initializing Express:
 const app = express();
 
-// Path constraints + using "public" route
+// Path constraints:
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-app.use("/public", express.static(path.join(__dirname, "public")));
-
-// Declaring the server port:
-const PORT = process.env.PORT
 
 // Global middleware:
 app.use(cors())
 app.use(express.urlencoded({extended: true}))
 app.use(express.json())
+app.use("/public", express.static(path.join(__dirname, "public")));
+
+// Declaring the server port:
+const PORT = process.env.PORT || 3333
 
 // When the server starts:
 conn.sync().then(() => {
