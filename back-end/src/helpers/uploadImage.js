@@ -22,7 +22,7 @@ const imgStorage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = String(Math.floor(Math.random() * 100000))
-    cb(null, Date.now() + uniqueSuffix + path.extname)
+    cb(null, Date.now() + uniqueSuffix + path.extname(file.originalname))
   }
 })
 
