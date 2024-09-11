@@ -8,7 +8,6 @@ import postIdSchema from "../validators/postIdSchema.js";
 
 // Helpers:
 import formatZodError from "../helpers/formatZodError.js";
-import { request } from "express";
 
 export const createPost = async (req, res) => {
   const bodyVal = createPostSchema.safeParse(req.body);
@@ -198,9 +197,27 @@ export const uploadImageToPost = async (req, res) => {
     });
   }
 
-  try {
+  const postagem_id = req.params.id
+  const imagem = req.file.filename
+
+  try {    
+    const post = await Postagem.findByPk(postagem_id)
+
+    if (!post) {
+      return res.status(404).json({
+        message: "A postagem não foi encontrada."
+      })
+    }
+    if (!req.file) {
+      return res.status(400).json({
+        message: "A imagem não foi encontrada."
+      })
+    }
+
+    await Postagem.update({ imagem }, { where: { postagem_id } })
+
     res.status(201).json({
-      message: "Imagem enviada com sucesso."
+      message: "Imagem enviada e atribuída com sucesso."
     })
   } catch (error) {
     console.error(error)
