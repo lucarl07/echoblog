@@ -157,7 +157,32 @@ export const updateUser = async (req, res) => {
   }
 }
 
-export const getUserList = async (req, res) => {}
+export const getUserList = async (req, res) => {
+  const { nome, email, senha } = req.query
+
+  try {
+    const params = {}
+
+    if (nome) {
+      params["nome"] = `%${nome}%`
+    }
+    if (email) {
+      params["email"] = `%${email}%`
+    }
+    if (senha) {
+      params["senha"] = `%${senha}%`
+    }
+    
+    const usuarios = await Usuario.findAll({ where: params })
+
+    res.status(200).json(usuarios)
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Erro interno durante a busca por usuários."
+    })
+  }
+}
 
 export const removeUserAccount = async (req, res) => {}
 
