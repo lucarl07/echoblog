@@ -10,9 +10,11 @@ import conn from "./config/dbconfig.js"
 
 // Initializing models:
 import Postagem from "./model/postagemModel.js";
+import Usuario from "./model/usuarioModel.js";
 
 // Importing routers:
 import postagemRouter from "./routes/postagemRoutes.js"
+import usuarioRouter from "./routes/usuarioRoutes.js"
 
 // Initializing Express:
 const app = express();
@@ -42,6 +44,7 @@ conn.sync().then(() => {
 
 // Using routes:
 app.use("/postagens", postagemRouter)
+app.use("/usuarios", usuarioRouter)
 
 // Default unknown route:
 app.use("/", (req, res) => {
