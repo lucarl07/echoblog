@@ -13,7 +13,7 @@ router.put("/:id", verifyUserToken, updateUser)
 
 // Limited Routes (Admin-only):
 router.get("/", verifyAdminToken, getUserList)
-router.delete("/:id", removeUserAccount)
-router.patch("/:id/papel", alterUserPermissions)
+router.delete("/:id", verifyAdminToken, removeUserAccount)
+router.patch("/:id/papel", verifyAdminToken, alterUserPermissions)
 
 export default router;
