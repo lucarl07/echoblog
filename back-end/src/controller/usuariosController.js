@@ -38,13 +38,16 @@ export const registerUser = async (req, res) => {
     }
     
     const hashedSenha = hashPassword(senha, 10)
-    const imagem = req.file.path || null
     
     const newUser = { 
       nome, email, 
       senha: hashedSenha,
-      imagem,
       papel
+    }
+
+    if (req.file) {
+      const imagem = req.file.filename
+      newUser['imagem'] = imagem
     }
 
     await Usuario.create(newUser)
