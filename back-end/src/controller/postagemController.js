@@ -34,7 +34,7 @@ export const createPost = async (req, res) => {
 
     const newPost = { 
       titulo, conteudo, 
-      autor: tokenBearer.nome,
+      autor_id: tokenBearer.id,
       imagem 
     }
 
@@ -51,12 +51,20 @@ export const createPost = async (req, res) => {
 }
 
 export const showPostsByPage = async (req, res) => {
+  const autor_id = req.query.autor || ""
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
   const offset = (page - 1) * limit;
 
   try {
+    const queryCondition = {}
+
+    if (autor_id) {
+      queryCondition["autor_id"] = autor_id
+    }
+
     const postagens = await Postagem.findAndCountAll({
+      where: queryCondition,
       limit,
       offset,
     });
