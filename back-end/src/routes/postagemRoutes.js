@@ -1,5 +1,6 @@
 import { Router } from "express";
 
+import verifyPosterToken from "../helpers/verifyPosterToken.js";
 import uploader from "../helpers/uploadImage.js";
 
 import { 
@@ -13,7 +14,7 @@ import {
 
 const router = Router();
 
-router.post("/", uploader.single("imagem"), createPost)
+router.post("/", verifyPosterToken, uploader.single("imagem"), createPost)
 router.get("/", showPostsByPage)
 router.get("/:id", getPostByID)
 router.put("/:id", updatePost)
