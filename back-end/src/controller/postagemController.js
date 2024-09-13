@@ -8,6 +8,7 @@ import postIdSchema from "../validators/postIdSchema.js";
 
 // Helpers:
 import formatZodError from "../helpers/formatZodError.js";
+import findTokenBearer from "../helpers/findTokenBearer.js";
 
 export const createPost = async (req, res) => {
   const bodyVal = createPostSchema.safeParse(req.body);
@@ -19,18 +20,24 @@ export const createPost = async (req, res) => {
     });
   }
   
-  const { titulo, conteudo, autor } = req.body;
+  const { titulo, conteudo } = req.body;
   let imagem = ""
 
-  if (request.file) {
-    imagem = request.file.filename
+  if (req.file) {
+    imagem = req.file.filename
   } else {
     imagem = ""
   }
 
-  const newPost = { titulo, conteudo, autor, imagem }
-
   try {
+    const tokenBearer = findTokenBearer(req)
+
+    const newPost = { 
+      titulo, conteudo, 
+      autor: tokenBearer.nome,
+      imagem 
+    }
+
     await Postagem.create(newPost);
     res.status(201).json({
       message: "Postagem publicada com sucesso!"
