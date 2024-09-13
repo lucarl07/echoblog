@@ -29,14 +29,7 @@ export const registerUser = async (req, res) => {
   const { nome, email, senha, papel } = req.body
 
   try {
-    const usedEmail = await Usuario.findAll({ 
-      where: {
-        email,
-        [Op.not]: { 
-          usuario_id: id 
-        }
-      },
-    })
+    const usedEmail = await Usuario.findAll({ where: {email} })
 
     if (usedEmail.length > 0) {
       return res.status(409).json({
