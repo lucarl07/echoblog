@@ -30,10 +30,12 @@ export const registerUser = async (req, res) => {
 
   try {
     const hashedSenha = hashPassword(senha, 10)
+    const imagem = req.file.path || null
 
     const newUser = { 
       nome, email, 
-      senha: hashedSenha, 
+      senha: hashedSenha,
+      imagem,
       papel
     }
 
