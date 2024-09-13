@@ -127,7 +127,7 @@ export const updateUser = async (req, res) => {
   }
 
   const { id } = req.params
-  const { nome, email, senha, papel } = req.body
+  const { nome, email, senha, imagem } = req.body
   
   try {
     const user = await Usuario.findByPk(id)
@@ -153,11 +153,14 @@ export const updateUser = async (req, res) => {
       })
     }
 
-    const updatedUser = { nome, email, papel }
+    const updatedUser = { nome, email }
 
     if (senha) {
       const hashedSenha = hashPassword(senha, 10)
       updatedUser['senha'] = hashedSenha
+    }
+    if (imagem) {
+      updatedUser['imagem'] = req.file.path || null
     }
 
     await Usuario.update(updatedUser, {

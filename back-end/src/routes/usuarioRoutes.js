@@ -10,7 +10,7 @@ const router = Router();
 // Public Routes:
 router.post("/registro", uploadImage.single("imagem"), registerUser)
 router.post("/login", loginAsUser)
-router.put("/:id", verifyUserToken, updateUser)
+router.put("/:id", verifyUserToken, uploadImage.single("imagem"), updateUser)
 
 // Limited Routes (Admin-only):
 router.get("/", verifyAdminToken, getUserList)
