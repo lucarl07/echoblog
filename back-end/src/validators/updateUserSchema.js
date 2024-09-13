@@ -17,8 +17,8 @@ const updateUserSchema = z.object({
     .min(8, "A senha deve ter pelo menos 8 caracteres.")
     .regex(passwordRegex, "A senha deve conter letras maiúsculas, minúsculas e números.")
   ),
-  papel: z.optional(
-    z.enum(["administrador", "autor", "leitor"])
+  imagem: z.optional(
+    z.string()
   )
 })
 
