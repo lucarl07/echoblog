@@ -20,11 +20,15 @@ const Usuario = conn.define("usuarios", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  imagem: {
+    type: DataTypes.STRING,
+    defaultValue: "../../public/usuarios/default-image.png"
+  },
   papel: {
     type: DataTypes.ENUM,
     values: ["administrador", "autor", "leitor"],
     defaultValue: "leitor"
-  }
+  },
 })
 
 export default Usuario;
