@@ -29,9 +29,24 @@ export const registerUser = async (req, res) => {
   const { nome, email, senha, papel } = req.body
 
   try {
+    const usedEmail = await Usuario.findAll({ 
+      where: {
+        email,
+        [Op.not]: { 
+          usuario_id: id 
+        }
+      },
+    })
+
+    if (usedEmail.length > 0) {
+      return res.status(409).json({
+        message: "O e-mail inserido já está em uso."
+      })
+    }
+    
     const hashedSenha = hashPassword(senha, 10)
     const imagem = req.file.path || null
-
+    
     const newUser = { 
       nome, email, 
       senha: hashedSenha,
