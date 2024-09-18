@@ -27,13 +27,15 @@ Usuario.belongsToMany(Postagem, {
   through: { 
     model: Comentario, 
     unique: false 
-  }
+  },
+  foreignKey: "usuario_id"
 })
 Postagem.belongsToMany(Usuario, { 
   through: { 
     model: Comentario, 
     unique: false 
-  }
+  },
+  foreignKey: "postagem_id"
 })
 
 export default Comentario;
