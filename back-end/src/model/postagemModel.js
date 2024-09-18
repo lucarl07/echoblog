@@ -33,5 +33,6 @@ Postagem.belongsTo(Usuario, {
     name: "autor_id"
   }
 });
+Usuario.hasMany(Postagem)
 
 export default Postagem;
