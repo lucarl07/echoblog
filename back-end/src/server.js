@@ -16,6 +16,7 @@ import Comentario from "./model/comentarioModel.js";
 // Importing routers:
 import postagemRouter from "./routes/postagemRoutes.js"
 import usuarioRouter from "./routes/usuarioRoutes.js"
+import comentarioRouter from "./routes/comentarioRoutes.js"
 
 // Initializing Express:
 const app = express();
@@ -46,6 +47,7 @@ conn.sync().then(() => {
 // Using routes:
 app.use("/postagens", postagemRouter)
 app.use("/usuarios", usuarioRouter)
+app.use("/comentarios", comentarioRouter)
 
 // Default unknown route:
 app.use("/", (req, res) => {
