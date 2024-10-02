@@ -59,3 +59,52 @@ export const createComment = async (req, res) => {
     })
   }
 }
+
+export const editComment = async (req, res) => {
+  const paramsVal = postIdSchema.safeParse(req.params);
+
+  if (!paramsVal.success) {
+    return res.status(400).json({
+      message: "Os dados recebidos da URL da requisição são inválidos.",
+      details: formatZodError(paramsVal.error),
+    });
+  }
+
+  const bodyVal = createCommentSchema.safeParse(req.body);
+
+  if (!bodyVal.success) {
+    return res.status(400).json({
+      message: "Os dados recebidos do corpo da requisição são inválidos.",
+      details: formatZodError(bodyVal.error),
+    });
+  }
+
+  const comentario_id = req.params.id
+  const { conteudo } = req.body
+
+  try {
+    const comentario = await Comentario.findByPk(comentario_id)
+    const tokenBearer = findTokenBearer(req)
+
+    if (
+      typeof tokenBearer !== 'object' || 
+      tokenBearer.id !== comentario.usuario_id
+    ) {
+      return res.status(401).json({
+        message: "Não foi possível concluir a ação."
+      })
+    }
+
+    await comentario.update({ conteudo })
+
+    res.status(200).json({
+      message: "Comentário atualizado com sucesso.",
+      changes: { conteudo }
+    })
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({
+      message: "Erro interno durante a atualização do comentário."
+    })
+  }
+}
