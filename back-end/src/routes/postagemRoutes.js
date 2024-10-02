@@ -14,12 +14,16 @@ import {
   updatePost,
   uploadImageToPost,
 } from "../controller/postagemController.js";
-import { createComment } from "../controller/comentarioController.js";
+import { 
+  createComment, 
+  listCommentsFromPost 
+} from "../controller/comentarioController.js";
 
 const router = Router();
 
 router.post("/", verifyPosterToken, uploader.single("imagem"), createPost);
 router.get("/", showPostsByPage);
+router.get("/:id/comentarios", listCommentsFromPost);
 router.get("/:id", getPostByID);
 router.put("/:id", updatePost);
 router.delete("/:id", deletePost);

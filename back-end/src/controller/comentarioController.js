@@ -1,5 +1,6 @@
 // Source model:
 import Comentario from "../model/comentarioModel.js";
+import Postagem from "../model/postagemModel.js";
 
 // Validators:
 import postIdSchema from "../validators/postIdSchema.js";
@@ -143,6 +144,33 @@ export const deleteComment = async (req, res) => {
     console.log(error)
     res.status(500).json({
       message: "Erro interno durante a atualização do comentário."
+    })
+  }
+}
+
+export const listCommentsFromPost = async (req, res) => {
+  const paramsVal = postIdSchema.safeParse(req.params);
+
+  if (!paramsVal.success) {
+    return res.status(400).json({
+      message: "Os dados recebidos da URL da requisição são inválidos.",
+      details: formatZodError(paramsVal.error),
+    });
+  }
+
+  const postagem_id = req.params.id;
+
+  try {
+    const comentarios = await Comentario.findAll({ where: { postagem_id } })
+
+    res.status(200).json({
+      amount: comentarios.length,
+      comments: comentarios
+    })
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({
+      message: "Erro interno durante a visualização dos comentários"
     })
   }
 }
