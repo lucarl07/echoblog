@@ -30,7 +30,7 @@ const Postagem = conn.define("postagens", {
 
 Postagem.belongsTo(Usuario, {
   foreignKey: {
-    name: "autor_id"
+    name: "autor_id",
   }
 });
 Usuario.hasMany(Postagem)
