@@ -1,6 +1,5 @@
 // Source model:
 import Comentario from "../model/comentarioModel.js";
-import Postagem from "../model/postagemModel.js";
 
 // Validators:
 import postIdSchema from "../validators/postIdSchema.js";
