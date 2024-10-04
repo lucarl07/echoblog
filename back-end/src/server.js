@@ -12,6 +12,7 @@ import conn from "./config/dbconfig.js"
 import Postagem from "./model/postagemModel.js";
 import Usuario from "./model/usuarioModel.js";
 import Comentario from "./model/comentarioModel.js";
+import Curtida from "./model/curtidaModel.js";
 
 // Importing routers:
 import postagemRouter from "./routes/postagemRoutes.js"
