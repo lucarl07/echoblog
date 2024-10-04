@@ -18,6 +18,7 @@ import {
   createComment, 
   listCommentsFromPost 
 } from "../controller/comentarioController.js";
+import { alterLike } from "../controller/curtidaController.js";
 
 const router = Router();
 
@@ -29,5 +30,6 @@ router.put("/:id", updatePost);
 router.delete("/:id", deletePost);
 router.post("/:id/comentarios", createComment);
 router.post("/:id/imagem", uploader.single("imagem"), uploadImageToPost);
+router.post("/:postagem_id/curtidas", alterLike)
 
 export default router;
